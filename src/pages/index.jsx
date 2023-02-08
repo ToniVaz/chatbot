@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
+import LinearIndeterminate from "./loader";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 const API_URL = "https://api.openai.com/v1/completions";
@@ -39,6 +40,8 @@ const OpenAIChat = () => {
       console.error(error);
     }
   };
+
+  console.log("RESpone", response);
 
   return (
     <Grid
@@ -144,13 +147,17 @@ const OpenAIChat = () => {
           borderRadius: "10px",
         }}
       >
-        <Typography
-          fontFamily="monospace"
-          variant="h4"
-          sx={{ padding: "20px" }}
-        >
-          {response}
-        </Typography>
+        {response === "" ? (
+          <LinearIndeterminate />
+        ) : (
+          <Typography
+            fontFamily="monospace"
+            variant="h4"
+            sx={{ padding: "20px" }}
+          >
+            {response}
+          </Typography>
+        )}
       </Grid>
     </Grid>
   );
