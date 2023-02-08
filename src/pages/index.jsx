@@ -12,12 +12,14 @@ const API_URL = "https://api.openai.com/v1/completions";
 const OpenAIChat = () => {
   const [inputValue, setInputValue] = useState("");
   const [response, setResponse] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
 
   const handleSubmit = async () => {
+    setOpen(true);
     try {
       const result = await axios.post(
         API_URL,
@@ -34,14 +36,15 @@ const OpenAIChat = () => {
           },
         }
       );
-      setResponse(result.data.choices[0].text);
-      setInputValue("");
+      if (result?.status === 200) {
+        setOpen(false);
+        setResponse(result.data.choices[0].text);
+        setInputValue("");
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
-  console.log("RESpone", response);
 
   return (
     <Grid
@@ -63,7 +66,7 @@ const OpenAIChat = () => {
         }}
       >
         <Typography variant="h2" fontFamily="Anton" sx={{ padding: "20px" }}>
-          CHAT <span style={{ color: "red" }}>TEST</span>
+          TEST <span style={{ color: "red" }}>CHAT</span>
         </Typography>
         <Typography variant="h5" fontFamily="Anton" color="#B4B4B4">
           @thoni
@@ -147,7 +150,7 @@ const OpenAIChat = () => {
           borderRadius: "10px",
         }}
       >
-        {response === "" ? (
+        {open ? (
           <LinearIndeterminate />
         ) : (
           <Typography
